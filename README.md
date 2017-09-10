@@ -1,6 +1,8 @@
 # AWDFE
 AWDFE, which stands for Automated Windows Driver Fuzzing Environment, facilitate Windows driver fuzzing as its name indicates. AWDFE works exactly like below.  
 
+![](https://github.com/illuxic/AWDFE/blob/master/images/modern_software_development.gif?raw=true)
+
 ## Prerequisites
 - Visual Studio 2015 (**NOT** 2017)
 - Windows SDK
