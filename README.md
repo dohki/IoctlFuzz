@@ -1,5 +1,5 @@
 # AWDFE
-AWDFE, which stands for Automated Windows Driver Fuzzing Environment, facilitate Windows driver fuzzing as its name indicates. AWDFE works exactly like below.  
+AWDFE, which stands for Automated Windows Driver Fuzzing Environment, facilitates Windows driver fuzzing as its name indicates. AWDFE works exactly like below.  
 
 ![](https://github.com/illuxic/AWDFE/blob/master/images/modern_software_development.gif?raw=true)
 
@@ -15,8 +15,8 @@ AWDFE, which stands for Automated Windows Driver Fuzzing Environment, facilitate
 
 ## Get Started
 ### on host OS
-1. Issue `python setup.py` as admin.
-2. Issue `python start_fuzzing.py` as admin.
+1. `python setup.py` as admin.
+2. `python start_fuzzing.py` as admin.
 3. Copy `AWDFE/on_target` to target OS.
 ### on target OS
 1. `python setup.py`
