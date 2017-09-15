@@ -59,6 +59,9 @@ def set_virtual_kd_configs():
 	}
 	reg_edit(key_name, reg_dict)
 
+def make_line(data):
+    return '{}\n'.format(data)
+
 def add_script_to_startup_dir(run_on_boot):
 	# TODO: Where SHGFP_TYPE_CURRENT or DEFAULT are defined?
 	startup_dir_path = win32com.shell.shell.SHGetFolderPath(None, win32com.shell.shellcon.CSIDL_STARTUP, None, 0)
