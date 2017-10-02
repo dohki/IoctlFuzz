@@ -1,26 +1,22 @@
 # AWDFE
-AWDFE, which stands for Automated Windows Driver Fuzzing Environment, facilitates Windows driver fuzzing as its name indicates. AWDFE works exactly like below.  
+AWDFE, which stands for Automated Windows Driver Fuzzing Environment, facilitates Windows driver fuzzing as its name indicates. AWDFE works exactly like this.  
 
 ![](https://github.com/illuxic/AWDFE/blob/master/images/modern_software_development.gif?raw=true)
 
 ## Prerequisites
-- Visual Studio 2015 (**NOT** 2017)
 - Windows SDK
-- WDK
 - Python 3.x
 - git
 - VMware and target OS
 - VirtualKD
-- !exploitable (WinDbg extension)
+- WinDbg extension: !exploitable, pykd
 
 ## Get Started
 ### on host OS
 1. `python setup.py` as admin.
 2. `python start_fuzzing.py` as admin.
-3. Copy `AWDFE/on_target` to target OS.
 ### on target OS
 1. `python setup.py`
-2. `python ioctl_fuzzer.py`
 
 ## Tested On
 \# | host OS | target OS
@@ -29,6 +25,6 @@ AWDFE, which stands for Automated Windows Driver Fuzzing Environment, facilitate
 
 ## Further Improvement
 - to validate and automate `IDA` ioctl script `win_driver_plugin`
+- to improve fuzzer
 - master/slave task management
 - web interface
-- fuzzer logic
