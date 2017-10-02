@@ -8,6 +8,14 @@ GENERIC_READ    = 0x80000000
 GENERIC_WRITE   = 0x40000000
 OPEN_EXISTING   = 0x3
 
+# TODO: Do not backup on target. Do backup on host with WinDbg.
+def backup():
+    backups = glob.glob(os.path.join('backups', '*'))
+    try:
+        os.rename('last_fuzz_info.txt', os.path.join('backups', '{}.txt'.format(len(backups))))
+    except FileNotFoundError:
+        pass
+
 def choose_item():
     items   = glob.glob(os.path.join('ioctl_items', '*'))
     item    = random.choice(items)
@@ -46,6 +54,8 @@ def get_fake_len(length):
         return length + random.randint(-1 * length, length)
 
 if __name__ == '__main__':
+    backup()
+
     i = 0
     while True:
         if i % 1000 == 0:

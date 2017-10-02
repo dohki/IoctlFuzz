@@ -1,12 +1,13 @@
 import argparse
 import os
-import winreg
 import ctypes
-import win32com.shell.shell
-import win32com.shell.shellcon
 import json
+import winreg
+import winshell
+
 
 __author__ = 'illuxic'
+
 
 def parse_args():
 	parser = argparse.ArgumentParser(description='Set configs for AWDFE (Automated Windows Driver Fuzzing Enviroment).', formatter_class=argparse.RawTextHelpFormatter)
@@ -63,9 +64,7 @@ def make_line(data):
     return '{}\n'.format(data)
 
 def add_script_to_startup_dir(run_on_boot):
-	# TODO: Where SHGFP_TYPE_CURRENT or DEFAULT are defined?
-	startup_dir_path = win32com.shell.shell.SHGetFolderPath(None, win32com.shell.shellcon.CSIDL_STARTUP, None, 0)
-	script_path = os.path.join(startup_dir_path, 'on_host_boot.bat')
+	script_path = os.path.join(winshell.startup(), 'on_host_boot.bat')
 
 	if run_on_boot:
 		with open(script_path, 'w') as f:
