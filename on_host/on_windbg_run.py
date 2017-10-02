@@ -62,6 +62,7 @@ class Debugger:
                 break
 
             result = self.dbg_cmd(cmd)
+            # TODO: Do not print what windbg prints automatically.
             if result is not None:
                 print(result)
 
@@ -87,7 +88,7 @@ class Debugger:
                 break
 
         crash_hash = m.group(1)
-        # TODO: Is pykd using python interactive? Why not __file__ instead of sys.argv[0]?
+        # TODO: Is pykd using python interpreter? Why not __file__ instead of sys.argv[0]?
         base_path = os.path.abspath(os.path.join(sys.argv[0], os.pardir, os.pardir))  
         crash_path = os.path.join(base_path, 'results', crash_hash)
 

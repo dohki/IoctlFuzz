@@ -55,7 +55,7 @@ def set_virtual_kd_configs():
 		'PatchDelay': (winreg.REG_DWORD, 3),
 		'ToolsNotInstalled': (winreg.REG_DWORD, 0),
 		'ToolsPath': (winreg.REG_SZ, r'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64'),
-		'WaitForOS': (winreg.REG_DWORD, 1)
+		'WaitForOS': (winreg.REG_DWORD, 1),
 	}
 	reg_edit(key_name, reg_dict)
 
