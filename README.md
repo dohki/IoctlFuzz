@@ -6,7 +6,6 @@ AWDFE, which stands for Automated Windows Driver Fuzzing Environment, facilitate
 ## Prerequisites
 - Windows SDK
 - Python 3.x
-- git
 - VMware and target OS
 - VirtualKD
 - WinDbg extension: !exploitable, pykd
