@@ -12,9 +12,11 @@ AWDFE, which stands for Automated Windows Driver Fuzzing Environment, facilitate
 
 ## Get Started
 ### on host OS
+1. `pip install pykd pypiwin32 winshell`
 1. `python setup.py` as admin.
-2. `python start_fuzzing.py` as admin.
+1. `python start_fuzzing.py` as admin.
 ### on target OS
+1. `pip install pypiwin32 winshell`
 1. `python setup.py`
 
 ## Tested On
