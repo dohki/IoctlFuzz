@@ -80,9 +80,8 @@ if __name__ == '__main__':
 
         driver_handle = ctypes.windll.kernel32.CreateFileW(device, GENERIC_READ | GENERIC_WRITE, 0, None, OPEN_EXISTING, 0, None)
         ret_val = ctypes.windll.kernel32.DeviceIoControl(driver_handle, ioctl_code, in_buf, in_buf_len, ctypes.byref(out_buf), out_buf_len, ctypes.byref(ret_buf), None)
-        if ret_val != 0:
-            print(ret_val)
-            print(ctypes.windll.kernel32.GetLastError())
+        if ret_val == 0:
+            print('Error Code: {}'.format(ctypes.windll.kernel32.GetLastError()))
         ctypes.windll.kernel32.CloseHandle(driver_handle)
 
         i += 1
