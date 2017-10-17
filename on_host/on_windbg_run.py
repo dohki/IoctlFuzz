@@ -5,7 +5,7 @@ import sys
 import getpass
 
 
-__author__ = 'illuxic'
+__author__ = 'dohki'
 
 
 def make_line(data):
@@ -57,7 +57,7 @@ class Debugger:
 
     def shell(self):
         while True:
-            cmd = input('{}@AWDFE:~$ '.format(getpass.getuser()))
+            cmd = input('{}@WinDFuzz:~$ '.format(getpass.getuser()))
             if cmd == 'exit':
                 break
 

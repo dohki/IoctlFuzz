@@ -4,7 +4,7 @@ import json
 import subprocess
 import os
 
-__author__ = 'illuxic'
+__author__ = 'dohki'
 
 def load_configs():
 	with open('configs.txt', 'r') as f:

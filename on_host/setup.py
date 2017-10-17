@@ -6,11 +6,11 @@ import winreg
 import winshell
 
 
-__author__ = 'illuxic'
+__author__ = 'dohki'
 
 
 def parse_args():
-	parser = argparse.ArgumentParser(description='Set configs for AWDFE (Automated Windows Driver Fuzzing Enviroment).', formatter_class=argparse.RawTextHelpFormatter)
+	parser = argparse.ArgumentParser(description='Set configs for WinDFuzz (Automated Windows Driver Fuzzing Enviroment).', formatter_class=argparse.RawTextHelpFormatter)
 
 	parser.add_argument('vmmon_path', help=r'vmmmon path in VirtualKD (e.g. %%UserProfile%%\Desktop\VirtualKD-3.0\vmmon64.exe)')
 	parser.add_argument('target_vmx_path', help=r'vmx path of target vm (e.g. %%UserProfile%%\Documents\Virtual Machines\Windows 7 x64\Windows 7 x64.vmx)')
