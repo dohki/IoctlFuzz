@@ -29,6 +29,6 @@ IoctlFuzz, facilitates setting kernel-level-fuzzing-environment. IoctlFuzz works
 ## Working On
 - [x] coverage-guided fuzzing
 - [x] SQLite-based corpus management
-- [ ] automated 
+- [ ] automated ioctl dict parsing
 - [ ] distributed system
 - [ ] web interface
