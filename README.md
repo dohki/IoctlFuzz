@@ -4,11 +4,16 @@ IoctlFuzz, facilitates setting kernel-level-fuzzing-environment and fuzzing IOCT
 ![](https://github.com/dohki/IoctlFuzz/blob/master/images/modern_software_development.gif?raw=true)
 
 ## Prerequisites
+### on host OS
 - Windows SDK
-- Python 3.x
+- Python 3
 - VMware and target OS
 - VirtualKD
 - WinDbg extension: !exploitable, pykd
+### on target OS
+- Python 3
+- VirtualKD
+- z3
 
 ## Get Started
 ### on host OS
