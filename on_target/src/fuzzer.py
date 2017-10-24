@@ -82,7 +82,7 @@ def get_drv_handle(dev_name):
 			0, 
 			None, 
 			win32file.OPEN_EXISTING, 
-			None
+			None,
 			0, 
 		)
 
