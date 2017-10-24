@@ -1,5 +1,5 @@
 # IoctlFuzz
-IoctlFuzz, facilitates setting kernel-level-fuzzing-environment. IoctlFuzz works exactly like this.  
+IoctlFuzz, facilitates setting kernel-level-fuzzing-environment and fuzzing IOCTL in drivers. IoctlFuzz works exactly like this.  
 
 ![](https://github.com/dohki/IoctlFuzz/blob/master/images/modern_software_development.gif?raw=true)
 
@@ -29,6 +29,7 @@ IoctlFuzz, facilitates setting kernel-level-fuzzing-environment. IoctlFuzz works
 ## Working On
 - [x] coverage-guided fuzzing
 - [x] SQLite-based corpus management
+- [ ] pipe between host and target
 - [ ] automated ioctl dict parsing
 - [ ] distributed system
 - [ ] web interface
