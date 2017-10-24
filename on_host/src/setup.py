@@ -5,14 +5,11 @@ import json
 import winreg
 import winshell
 
-
-__author__ = 'dohki'
-
-
+# TODO: Update
 def parse_args():
 	parser = argparse.ArgumentParser(description='Set configs for WinDFuzz (Automated Windows Driver Fuzzing Enviroment).', formatter_class=argparse.RawTextHelpFormatter)
 
-	parser.add_argument('vmmon_path', help=r'vmmmon path in VirtualKD (e.g. %%UserProfile%%\Desktop\VirtualKD-3.0\vmmon64.exe)')
+	parser.add_argument('vmmon_path', help=r'vmmmon path in VirtualKD (e.g. C:\VirtualKD-3.0\vmmon64.exe)')
 	parser.add_argument('target_vmx_path', help=r'vmx path of target vm (e.g. %%UserProfile%%\Documents\Virtual Machines\Windows 7 x64\Windows 7 x64.vmx)')
 	parser.add_argument('--run-on-boot', action='store_true', help='let everything run automatically on host boot')
 
@@ -26,7 +23,7 @@ def validate_args(args):
 	assert args.target_vmx_path.endswith('.vmx')
 
 def save_args(args):
-	with open('configs.txt', 'w') as f:
+	with open('../config/env_conf.txt', 'w') as f:
 		f.write(json.dumps(vars(args)))
 
 def reg_edit(key_name, reg_dict):
@@ -36,6 +33,7 @@ def reg_edit(key_name, reg_dict):
 		winreg.SetValueEx(key, reg_name, 0, reg_type, reg_data)
 
 def turn_uac(on_off):
+
 	def bool_to_int(bool_val):
 		return ctypes.c_int(bool_val).value
 
@@ -55,6 +53,7 @@ def set_virtual_kd_configs():
 		'InitialBreakIn': (winreg.REG_DWORD, 1),
 		'PatchDelay': (winreg.REG_DWORD, 3),
 		'ToolsNotInstalled': (winreg.REG_DWORD, 0),
+		# TODO: hard coding...
 		'ToolsPath': (winreg.REG_SZ, r'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64'),
 		'WaitForOS': (winreg.REG_DWORD, 1),
 	}
@@ -78,7 +77,7 @@ def add_script_to_startup_dir(run_on_boot):
 			pass
 
 def make_windbg_script():
-	with open('on_windbg_startup.txt', 'w') as f:
+	with open('../src/on_windbg_startup.txt', 'w') as f:
 		cmds  = make_line('.load msec')
 		cmds += make_line('.load pykd')
 		cmds += make_line('!py {}'.format(os.path.abspath('on_windbg_run.py')))
