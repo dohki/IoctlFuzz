@@ -1,7 +1,7 @@
-# WinDFuzz
-WinDFuzz, which stands for Windows Driver Fuzzer, facilitates setting kernel-level-fuzzing-environment. WinDFuzz works exactly like this.  
+# IoctlFuzz
+IoctlFuzz, facilitates setting kernel-level-fuzzing-environment. IoctlFuzz works exactly like this.  
 
-![](https://github.com/dohki/WinDFuzz/blob/master/images/modern_software_development.gif?raw=true)
+![](https://github.com/dohki/IoctlFuzz/blob/master/images/modern_software_development.gif?raw=true)
 
 ## Prerequisites
 - Windows SDK
