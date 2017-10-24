@@ -82,8 +82,8 @@ def get_drv_handle(dev_name):
 			0, 
 			None, 
 			win32file.OPEN_EXISTING, 
-			0, 
 			None
+			0, 
 		)
 
 	return drv_handles[dev_name]
@@ -102,10 +102,11 @@ if __name__ == '__main__':
 
 		ioctl_code	= random.choice(list(ioctl_dict.keys()))
 
-		buf_sizes		= map(get_rand_buf_size, ioctl_dict[ioctl_code])
-		fake_buf_sizes	= map(get_fake_buf_size, buf_sizes)
+		buf_sizes		= list(map(get_rand_buf_size, ioctl_dict[ioctl_code]))
+		fake_buf_sizes	= list(map(get_fake_buf_size, buf_sizes))
 
-		in_buf, out_buf, ret_buf = get_bufs(*fake_buf_sizes)	
+		in_buf_size, out_buf_size	= buf_sizes
+		in_buf, out_buf, ret_buf 	= get_bufs(*fake_buf_sizes)	
 		
 		info = dict(
 			dev_name=dev_name,
