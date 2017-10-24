@@ -26,8 +26,9 @@ IoctlFuzz, facilitates setting kernel-level-fuzzing-environment. IoctlFuzz works
 -- | --------------- | ----------------
 0 | Windows 10 x64 | Windows 7 x64
 
-## Further Improvement
-- to validate and automate `IDA` ioctl script `win_driver_plugin`
-- to improve fuzzer
-- master/slave task management
-- web interface
+## Working On
+- [x] coverage-guided fuzzing
+- [x] SQLite-based corpus management
+- [ ] automated 
+- [ ] distributed system
+- [ ] web interface
