@@ -13,12 +13,12 @@ IoctlFuzz, facilitates setting kernel-level-fuzzing-environment and fuzzing IOCT
 ## Get Started
 ### on host OS
 1. `pip install pykd pypiwin32 winshell`
-1. `cd on_host`
+1. `cd on_host/src`
 1. `python setup.py` as admin.
 1. `python start_fuzzing.py` as admin.
 ### on target OS
 1. `pip install pypiwin32 winshell`
-1. `cd on_target`
+1. `cd on_target/src`
 1. `python setup.py`
 
 ## Tested On
