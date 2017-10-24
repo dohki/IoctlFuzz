@@ -8,7 +8,7 @@ import ctypes, win32file
 def backup():
 	backups = glob.glob('../crashes/*')
 	try:
-		os.rename('../config/last_fuzz_info.txt', 'crashes/{}.txt'.format(len(backups)))
+		os.rename('../config/last_fuzz_info.txt', '../crashes/{}.txt'.format(len(backups)))
 	except FileNotFoundError:
 		pass
 
@@ -111,13 +111,15 @@ if __name__ == '__main__':
 
 		in_buf_size, out_buf_size	= buf_sizes
 		in_buf, out_buf, ret_buf 	= get_bufs(*fake_buf_sizes)	
+
+		in_buf_raw 	= in_buf.raw.decode('utf-8') if in_buf is not None else None
 		
 		info = dict(
 			dev_name=dev_name,
 			ioctl_code=ioctl_code,
 			buf_sizes=buf_sizes,
 			fake_buf_sizes=fake_buf_sizes,
-			in_buf=in_buf,
+			in_buf_raw=in_buf_raw,
 		)
 		save_fuzz_info(info)
 
