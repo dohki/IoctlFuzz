@@ -7,7 +7,7 @@ import os
 __author__ = 'dohki'
 
 def load_configs():
-	with open('configs.txt', 'r') as f:
+	with open('../config/env_conf.txt', 'r') as f:
 		return json.load(f)
 
 def run_vmmon(vmmon_path):

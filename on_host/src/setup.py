@@ -5,12 +5,20 @@ import json
 import winreg
 import winshell
 
+def mkdirs():
+	dir_names = ['config']
+	for dir_name in dir_names:
+		try:
+			os.mkdir(os.path.join('..', dir_name))
+		except FileExistsError:
+			pass
+
 # TODO: Update
 def parse_args():
 	parser = argparse.ArgumentParser(description='Set configs for WinDFuzz (Automated Windows Driver Fuzzing Enviroment).', formatter_class=argparse.RawTextHelpFormatter)
 
 	parser.add_argument('vmmon_path', help=r'vmmmon path in VirtualKD (e.g. C:\VirtualKD-3.0\vmmon64.exe)')
-	parser.add_argument('target_vmx_path', help=r'vmx path of target vm (e.g. %%UserProfile%%\Documents\Virtual Machines\Windows 7 x64\Windows 7 x64.vmx)')
+	parser.add_argument('target_vmx_path', help=r'vmx path of target vm (e.g. %%UserProfile%%\Documents\Virtual Machines\Windows 7 x86\Windows 7 x86.vmx)')
 	parser.add_argument('--run-on-boot', action='store_true', help='let everything run automatically on host boot')
 
 	return parser.parse_args()
@@ -54,7 +62,7 @@ def set_virtual_kd_configs():
 		'PatchDelay': (winreg.REG_DWORD, 3),
 		'ToolsNotInstalled': (winreg.REG_DWORD, 0),
 		# TODO: hard coding...
-		'ToolsPath': (winreg.REG_SZ, r'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64'),
+		'ToolsPath': (winreg.REG_SZ, r'C:\Program Files (x86)\Windows Kits\10\Debuggers\x86'),
 		'WaitForOS': (winreg.REG_DWORD, 1),
 	}
 	reg_edit(key_name, reg_dict)
@@ -84,6 +92,8 @@ def make_windbg_script():
 		f.write(cmds)
         
 if __name__ == '__main__':
+	mkdirs()
+
 	args = parse_args()
 	validate_args(args)
 	save_args(args)

@@ -62,7 +62,7 @@ class Debugger:
 	# TODO: nested shell
 	def shell(self):
 		while True:
-			cmd = input('{}@WinDFuzz:~$ '.format(getpass.getuser())).strip()
+			cmd = input('{}@IoctlFuzz:~$ '.format(getpass.getuser())).strip()
 			if cmd == 'exit':
 				break
 
