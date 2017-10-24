@@ -13,16 +13,17 @@ def backup():
 		pass
 
 def init():
-	global tries, start_time
+	global tries, start_time, drv_handles
 
 	tries       = 0
 	start_time  = time.time()
+	drv_handles	= {}
 
 def print_status():
 	global tries, start_time
 
-	STATUS      = 'tries: {:>10}, run time: {:>20}'
-	run_time    = datetime.timedelta(seconds=(time.time() - start_time))
+	STATUS      = 'tries: {:>10}, run time: {}'
+	run_time    = datetime.timedelta(seconds=time.time() - start_time)
 	print(STATUS.format(tries, run_time), end='\r')
 
 def print_result(ret_val): 
@@ -30,7 +31,7 @@ def print_result(ret_val):
 		print('Error Code: {}'.format(ctypes.windll.kernel32.GetLastError()))
 
 def get_rand_drv_dict():
-	drv_dicts	= glob.glob('../dicts/*'))
+	drv_dicts	= glob.glob('../dicts/*')
 	drv_dict	= random.choice(drv_dicts)
 
 	with open(drv_dict) as f:
@@ -43,7 +44,7 @@ def get_rand_buf_size(cond):
 		return random.randint(0, 2 ** BIT_NUM - 1)
 
 	z3.set_option('smt.phase_selection', 5)
-	z3.set_option('smt.random_seed', random.randint(0, ctypes.c_uint(-1).value))
+	z3.set_option('smt.random_seed', random.randint(0, ctypes.c_uint(-1).value // 2))
 
 	x = z3.BitVec('x', BIT_NUM)
 
@@ -52,10 +53,10 @@ def get_rand_buf_size(cond):
 	s.add(eval(cond))
 	s.check()
 
-	return s.model()[x]
+	return s.model()[x].as_long()
 
 def get_fake_buf_size(buf_size):
-	return random.randint(buf_size - buf_size / 2, buf_size + buf_size / 2)
+	return random.randint(buf_size - buf_size // 2, buf_size + buf_size // 2)
 
 # TODO: Optimize
 def get_bufs(fake_in_buf_size, fake_out_buf_size):
@@ -74,10 +75,8 @@ def get_bufs(fake_in_buf_size, fake_out_buf_size):
 def get_drv_handle(dev_name):
 	global drv_handles
 
-	if dev_name in drv_handles.keys():
-		return drv_handles[dev_name]
-	else:
-		return ctypes.windll.kernel32.CreateFileW(
+	if dev_name not in drv_handles.keys():
+		drv_handles[dev_name] = ctypes.windll.kernel32.CreateFileW(
 			dev_name, 
 			win32file.GENERIC_READ | win32file.GENERIC_WRITE,
 			0, 
@@ -87,6 +86,7 @@ def get_drv_handle(dev_name):
 			None
 		)
 
+	return drv_handles[dev_name]
 
 if __name__ == '__main__':
 	backup()
@@ -116,7 +116,7 @@ if __name__ == '__main__':
 		)
 
 		ret_val = ctypes.windll.kernel32.DeviceIoControl(
-			get_drv_handle(dev_name)
+			get_drv_handle(dev_name),
 			ioctl_code,
 			in_buf, in_buf_size,
 			out_buf, out_buf_size,
