@@ -8,7 +8,7 @@ import ctypes, win32file
 def backup():
 	backups = glob.glob('../crashes/*')
 	try:
-		os.rename('../crashes/last_fuzz_info.txt', 'crashes/{}.txt'.format(len(backups)))
+		os.rename('../config/last_fuzz_info.txt', 'crashes/{}.txt'.format(len(backups)))
 	except FileNotFoundError:
 		pass
 
@@ -72,6 +72,10 @@ def get_bufs(fake_in_buf_size, fake_out_buf_size):
 	
 	return in_buf, out_buf, ret_buf
 
+def save_fuzz_info(info):
+	with open('../config/last_fuzz_info.txt', 'w') as f:
+		f.write(json.dumps(info))
+
 def get_drv_handle(dev_name):
 	global drv_handles
 
@@ -115,6 +119,7 @@ if __name__ == '__main__':
 			fake_buf_sizes=fake_buf_sizes,
 			in_buf=in_buf,
 		)
+		save_fuzz_info(info)
 
 		ret_val = ctypes.windll.kernel32.DeviceIoControl(
 			get_drv_handle(dev_name),
