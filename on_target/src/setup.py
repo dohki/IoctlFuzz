@@ -9,7 +9,7 @@ def add_script_to_startup_dir():
 
 	with open(script_path, 'w') as f:
 		cmds  = make_line('pushd {}'.format(os.getcwd()))
-		cmds += make_line('start "" python fuzzer.py')
+		cmds += make_line('start "" py -3 fuzzer.py')
 		f.write(cmds)
 
 def mkdirs():
