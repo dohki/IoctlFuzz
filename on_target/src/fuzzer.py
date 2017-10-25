@@ -3,14 +3,14 @@ import time, datetime
 import random, z3
 import ctypes, win32file
 
+LAST_FUZZ_INFO_FILE_NAME = '../config/last_fuzz_info.txt'
+
 # TODO: Do not backup on target. Do backup on host with WinDbg. or pipe?
 # TODO: Store the recent 1000 requests in SQLite.
 def backup():
-	backups = glob.glob('../crashes/*')
-	try:
-		os.rename('../config/last_fuzz_info.txt', '../crashes/{}.txt'.format(len(backups)))
-	except FileNotFoundError:
-		pass
+	if os.path.exists(LAST_FUZZ_INFO_FILE_NAME):
+		num_crashes = len(glob.glob('../crashes/*'))
+		os.rename(LAST_FUZZ_INFO_FILE_NAME, '../crashes/{}.txt'.format(num_crashes))
 
 def init():
 	global tries, start_time, drv_handles
@@ -73,7 +73,7 @@ def get_bufs(fake_in_buf_size, fake_out_buf_size):
 	return in_buf, out_buf, ret_buf
 
 def save_fuzz_info(info):
-	with open('../config/last_fuzz_info.txt', 'w') as f:
+	with open(LAST_FUZZ_INFO_FILE_NAME, 'w') as f:
 		f.write(json.dumps(info))
 
 def get_drv_handle(dev_name):
