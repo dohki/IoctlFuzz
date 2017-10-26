@@ -54,7 +54,7 @@ def get_rand_buf_size(cond):
 	return s.model()[x].as_long()
 
 def get_fake_buf_size(buf_size):
-	return random.randint(buf_size - buf_size // 2, buf_size + buf_size // 2)
+	return random.randint(-1, 2 * buf_size)
 
 def gen_rand_fuzz_info():
 	drv_dict  	= get_rand_drv_dict()
@@ -67,7 +67,10 @@ def gen_rand_fuzz_info():
 	buf_sizes		= list(map(get_rand_buf_size, ioctl_dict[ioctl_code]))
 	fake_buf_sizes	= list(map(get_fake_buf_size, buf_sizes))
 
-	in_buf_raw	= ''.join([chr(random.randint(0x00, 0xff)) for i in range(fake_buf_sizes[0])])
+	if fake_buf_sizes[0] == -1:
+		in_buf_raw 	= None
+	else:
+		in_buf_raw	= ''.join([chr(random.randint(0x00, 0xff)) for i in range(fake_buf_sizes[0])])
 
 	return dict(
 		dev_name=dev_name,
