@@ -20,22 +20,13 @@ def init():
 	start_time  = time.time()
 	drv_handles	= {}
 
-def print_status():
-	global tries, start_time
+def get_drv_handle(dev_name):
+	global drv_handles
 
-	STATUS      = 'tries: {:>10}, run time: {}'
-	run_time    = datetime.timedelta(seconds=time.time() - start_time)
-	print(STATUS.format(tries, run_time), end='\r')
+	if dev_name not in drv_handles.keys():
+		drv_handles[dev_name] = util.create_drv_handle(dev_name)
 
-def handle_err():
-	err_code = ctypes.windll.kernel32.GetLastError()
-	if err_code == 0:
-		return
-
-	if err_code == 998:
-		backup()
-
-	util.print_err(err_code)
+	return drv_handles[dev_name]
 
 def get_rand_drv_dict():
 	drv_dicts	= glob.glob('../dicts/*')
@@ -65,81 +56,60 @@ def get_rand_buf_size(cond):
 def get_fake_buf_size(buf_size):
 	return random.randint(buf_size - buf_size // 2, buf_size + buf_size // 2)
 
-# TODO: Optimize
-def get_bufs(fake_in_buf_size, fake_out_buf_size):
-	corpus	= ''.join([chr(random.randint(0x00, 0xff)) for i in range(fake_in_buf_size)])
+def gen_rand_fuzz_info():
+	drv_dict  	= get_rand_drv_dict()
 
-	in_buf	= ctypes.create_string_buffer(corpus.encode('utf-8'))
-	out_buf = ctypes.create_string_buffer(fake_out_buf_size)
+	dev_name	= drv_dict['dev_name']
+	ioctl_dict  = drv_dict['ioctl_dict']
 
-	in_buf	= random.choice([None, in_buf])
-	out_buf = random.choice([None, out_buf])
+	ioctl_code	= random.choice(list(ioctl_dict.keys()))
 
-	ret_buf = ctypes.c_ulong(random.randint(0, ctypes.c_ulong(-1).value))
+	buf_sizes		= list(map(get_rand_buf_size, ioctl_dict[ioctl_code]))
+	fake_buf_sizes	= list(map(get_fake_buf_size, buf_sizes))
+
+	in_buf_raw	= ''.join([chr(random.randint(0x00, 0xff)) for i in range(fake_buf_sizes[0])])
+
+	return dict(
+		dev_name=dev_name,
+		ioctl_code=ioctl_code,
+		buf_sizes=buf_sizes,
+		fake_buf_sizes=fake_buf_sizes,
+		in_buf_raw=in_buf_raw,
+	)
+
+def handle_err():
+	err_code = ctypes.windll.kernel32.GetLastError()
 	
-	return in_buf, out_buf, ret_buf
+	assert err_code != 0
 
-def save_fuzz_info(info):
-	with open(LAST_FUZZ_INFO_FILE_NAME, 'w') as f:
-		f.write(json.dumps(info))
+	if err_code == 998:
+		backup()
 
-def get_drv_handle(dev_name):
-	global drv_handles
+	util.print_err(err_code)
 
-	if dev_name not in drv_handles.keys():
-		drv_handles[dev_name] = ctypes.windll.kernel32.CreateFileW(
-			dev_name, 
-			win32file.GENERIC_READ | win32file.GENERIC_WRITE,
-			0, 
-			None, 
-			win32file.OPEN_EXISTING, 
-			None,
-			0, 
-		)
+def print_status():
+	global tries, start_time
 
-	return drv_handles[dev_name]
+	STATUS      = 'tries: {:>10}, run time: {}'
+	
+	run_time	= time.time() - start_time
+	
+	print(STATUS.format(tries, datetime.timedelta(seconds=run_time)), end='\r')
 
 if __name__ == '__main__':
 	backup()
 	init()
 
 	while True:
-		print_status()
+		fuzz_info	= gen_rand_fuzz_info()
+		with open(LAST_FUZZ_INFO_FILE_NAME, 'w') as f:
+			f.write(json.dumps(fuzz_info))
 		
-		drv_dict  	= get_rand_drv_dict()
-
-		dev_name	= drv_dict['dev_name']
-		ioctl_dict  = drv_dict['ioctl_dict']
-
-		ioctl_code	= random.choice(list(ioctl_dict.keys()))
-
-		buf_sizes		= list(map(get_rand_buf_size, ioctl_dict[ioctl_code]))
-		fake_buf_sizes	= list(map(get_fake_buf_size, buf_sizes))
-
-		in_buf_size, out_buf_size	= buf_sizes
-		in_buf, out_buf, ret_buf 	= get_bufs(*fake_buf_sizes)	
-
-		in_buf_raw 	= in_buf.raw.decode('utf-8') if in_buf is not None else None
-		
-		info = dict(
-			dev_name=dev_name,
-			ioctl_code=ioctl_code,
-			buf_sizes=buf_sizes,
-			fake_buf_sizes=fake_buf_sizes,
-			in_buf_raw=in_buf_raw,
-		)
-		save_fuzz_info(info)
-
-		ret_val = ctypes.windll.kernel32.DeviceIoControl(
-			get_drv_handle(dev_name),
-			ioctl_code,
-			in_buf, in_buf_size,
-			out_buf, out_buf_size,
-			ctypes.byref(ret_buf),
-			None
-		)
-
+		drv_handle	= get_drv_handle(fuzz_info['dev_name'])
+		ret_val		= util.do_fuzz(drv_handle, fuzz_info)
 		if ret_val == 0:
 			handle_err()
-		
+
+		print_status()
+
 		tries += 1
