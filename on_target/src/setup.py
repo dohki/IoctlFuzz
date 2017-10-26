@@ -2,24 +2,24 @@ import os
 import winshell
 
 def make_line(string):
-	return '{}\n'.format(string)
+    return '{}\n'.format(string)
 
 def add_script_to_startup_dir():
-	script_path = os.path.join(winshell.startup(), 'on_target_boot.bat')
+    script_path = os.path.join(winshell.startup(), 'on_target_boot.bat')
 
-	with open(script_path, 'w') as f:
-		cmds  = make_line('pushd {}'.format(os.getcwd()))
-		cmds += make_line('start "" py -3 fuzzer.py')
-		f.write(cmds)
+    with open(script_path, 'w') as f:
+        cmds  = make_line('pushd {}'.format(os.getcwd()))
+        cmds += make_line('start "" py -3 fuzzer.py')
+        f.write(cmds)
 
 def mkdirs():
-	dir_names = ['config', 'dicts', 'crashes']
-	for dir_name in dir_names:
-		try:
-			os.mkdir(os.path.join('..', dir_name))
-		except FileExistsError:
-			pass
+    dir_names = ['config', 'dicts', 'crashes']
+    for dir_name in dir_names:
+        try:
+            os.mkdir(os.path.join('..', dir_name))
+        except FileExistsError:
+            pass
 
 if __name__ == '__main__':
-	add_script_to_startup_dir()
-	mkdirs()
+    add_script_to_startup_dir()
+    mkdirs()
