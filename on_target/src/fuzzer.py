@@ -1,7 +1,7 @@
 import os, glob, json
 import time, datetime
 import random, z3
-import ctypes, win32file
+import ctypes, ctypes.wintypes, win32file
 
 LAST_FUZZ_INFO_FILE_NAME = '../config/last_fuzz_info.txt'
 
@@ -26,9 +26,47 @@ def print_status():
 	run_time    = datetime.timedelta(seconds=time.time() - start_time)
 	print(STATUS.format(tries, run_time), end='\r')
 
-def print_result(ret_val): 
-	if ret_val == 0:
-		print('Error Code: {}'.format(ctypes.windll.kernel32.GetLastError()))
+def print_error(): 
+	
+	def get_fmt_msg_flag():
+		FORMAT_MESSAGE_ALLOCATE_BUFFER	= 0x00000100
+		FORMAT_MESSAGE_FROM_SYSTEM		= 0x00001000
+		FORMAT_MESSAGE_IGNORE_INSERTS	= 0x00000200
+
+		return FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS
+
+	def get_lcid_eng():
+		
+		def MAKELANGID(primary_lang, sub_lang):
+			return (primary_lang & 0xff) | (sub_lang & 0xff) << 10
+
+		LANG_ENGLISH		= 0x09
+		SUBLANG_ENGLISH_US	= 0x01
+		LCID_ENGLISH		= MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US)
+
+		return LCID_ENGLISH
+
+	error_code	= ctypes.windll.kernel32.GetLastError()
+	if error_code == 0:
+		return
+
+	buf = ctypes.wintypes.LPSTR()
+
+	ctypes.windll.kernel32.FormatMessageA(
+		get_fmt_msg_flag(),
+		None,
+		error_code,
+		get_lcid_eng(),
+		ctypes.byref(buf),
+		0,
+		None
+	)
+
+	error_msg = buf.value.decode('utf-8').strip()
+
+	print('')
+	print('Error: {} ({})'.format(error_msg, error_code))
+	print('')
 
 def get_rand_drv_dict():
 	drv_dicts	= glob.glob('../dicts/*')
@@ -132,6 +170,7 @@ if __name__ == '__main__':
 			None
 		)
 
-		print_result(ret_val)
+		if ret_val == 0:
+			print_error()
 		
 		tries += 1
