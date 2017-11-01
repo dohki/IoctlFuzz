@@ -53,7 +53,7 @@ def create_drv_handle(dev_name):
         0
     )
 
-    notify('Got Dirver Handle {}'.format(drv_handle))
+    notify('Got Driver Handle {}'.format(drv_handle))
 
     return drv_handle
 
