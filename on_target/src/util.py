@@ -2,9 +2,7 @@ import ctypes, ctypes.wintypes
 import win32file
 
 def notify(content):
-    print('')
-    print(content)
-    print('')
+    print('[*] {}'.format(content))
 
 def print_err(err_code): 
 		
@@ -45,7 +43,7 @@ def print_err(err_code):
 def create_drv_handle(dev_name):
     notify('Creating Driver Handle for {}...'.format(dev_name))
     
-    return ctypes.windll.kernel32.CreateFileW(
+    drv_handle = ctypes.windll.kernel32.CreateFileW(
         dev_name, 
         win32file.GENERIC_READ | win32file.GENERIC_WRITE,
         0,
@@ -54,6 +52,10 @@ def create_drv_handle(dev_name):
         None,
         0
     )
+
+    notify('Got Dirver Handle {}'.format(drv_handle))
+
+    return drv_handle
 
 def get_bufs(in_buf_raw, fake_out_buf_size):
     if in_buf_raw is None:
@@ -67,6 +69,13 @@ def get_bufs(in_buf_raw, fake_out_buf_size):
         out_buf = ctypes.create_string_buffer(fake_out_buf_size)
         
     ret_buf = ctypes.c_ulong()
+
+    '''
+    def get_addr(buf):
+        return '0x{:x}'.format(ctypes.addressof(buf))
+
+    print(list(map(lambda x: get_addr(x), [in_buf])))#, out_buf, ret_buf])))
+    '''
 
     return in_buf, out_buf, ret_buf
 

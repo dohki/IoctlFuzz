@@ -3,6 +3,7 @@ import time, datetime
 import random, z3
 import ctypes, win32file
 import util
+import reproducer
 
 LAST_FUZZ_INFO_FILE_NAME = '../config/last_fuzz_info.txt'
 
@@ -85,10 +86,16 @@ def handle_err():
     
     assert err_code != 0
 
-    if err_code == 998:
-        backup()
-
     util.print_err(err_code)
+
+    if err_code == 998:
+        if reproducer.reproduce(LAST_FUZZ_INFO_FILE_NAME):
+            backup()
+            input()
+    else:
+        # TODO: mail
+        print('New Error!')
+        input()
 
 def print_status():
     global tries, start_time
@@ -97,13 +104,16 @@ def print_status():
     
     run_time	= time.time() - start_time
     
-    print(STATUS.format(tries, datetime.timedelta(seconds=run_time)), end='\r')
+    print(STATUS.format(tries, datetime.timedelta(seconds=run_time)))
 
 if __name__ == '__main__':
     backup()
     init()
 
     while True:
+        os.system('cls')
+        print_status()
+
         fuzz_info	= gen_rand_fuzz_info()
         with open(LAST_FUZZ_INFO_FILE_NAME, 'w') as f:
             f.write(json.dumps(fuzz_info))
@@ -112,7 +122,5 @@ if __name__ == '__main__':
         ret_val		= util.do_fuzz(drv_handle, fuzz_info)
         if ret_val == 0:
             handle_err()
-
-        print_status()
 
         tries += 1
