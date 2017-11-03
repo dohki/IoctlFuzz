@@ -6,13 +6,6 @@ def load_crash_info(crash_name):
     with open(crash_name, 'r') as f:
         return json.load(f)
 
-def handle_err():
-    err_code = ctypes.windll.kernel32.GetLastError()
-
-    assert err_code != 0
-	
-    util.print_err(err_code)
-
 def reproduce(crash_name):
     crash_info  = load_crash_info(crash_name)
     drv_handle  = util.create_drv_handle(crash_info['dev_name'])
@@ -21,7 +14,7 @@ def reproduce(crash_name):
     success = ret_val == 0
 
     if success:
-        handle_err()
+        util.handle_err(None)
     else:
         print('Error: Failed to reproduce crash.')
 
