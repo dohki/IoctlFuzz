@@ -18,6 +18,8 @@ def reproduce(crash_name):
     else:
         print('Error: Failed to reproduce crash.')
 
+    ctypes.windll.kernel32.CloseHandle(drv_handle)
+
     return success
 
 if __name__ == '__main__':
