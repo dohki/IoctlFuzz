@@ -92,3 +92,18 @@ def do_fuzz(drv_handle, fuzz_info):
         ctypes.byref(ret_buf),
         None
     )
+
+def handle_err(callback_err):
+    err_code = ctypes.windll.kernel32.GetLastError()
+    
+    assert err_code != 0
+
+    util.print_err(err_code)
+
+    try:
+        callback_err(err_code)
+        
+    except NotImplementedError:
+        # TODO: mail
+        notify('New Error!')
+        input()

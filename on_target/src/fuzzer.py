@@ -87,21 +87,16 @@ def gen_rand_fuzz_info():
         in_buf_raw=in_buf_raw,
     )
 
-def handle_err():
-    err_code = ctypes.windll.kernel32.GetLastError()
-    
-    assert err_code != 0
+def callback_err(err_code):
+    if err_code == 6:
+        util.notify('Cannot get handle for driver...')
 
-    util.print_err(err_code)
-
-    if err_code == 998:
+    elif err_code == 998:
         if reproducer.reproduce(LAST_FUZZ_INFO_FILE_NAME):
-            backup()
-            input()
+            backup_error()
+
     else:
-        # TODO: mail
-        print('New Error!')
-        input()
+        raise NotImplementedError
 
 def print_status():
     global tries, start_time
@@ -113,7 +108,7 @@ def print_status():
     print(STATUS.format(tries, datetime.timedelta(seconds=run_time)))
 
 if __name__ == '__main__':
-    backup()
+    backup_crash()
     init()
 
     while True:
@@ -127,6 +122,6 @@ if __name__ == '__main__':
         drv_handle	= get_drv_handle(fuzz_info['dev_name'])
         ret_val		= util.do_fuzz(drv_handle, fuzz_info)
         if ret_val == 0:
-            handle_err()
+            util.handle_err(callback_err)
 
         tries += 1
