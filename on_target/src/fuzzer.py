@@ -96,7 +96,7 @@ def handle_err():
 
     if err_code == 998:
         if reproducer.reproduce(LAST_FUZZ_INFO_FILE_NAME):
-            backup()
+            backup_error()
             input()
     else:
         # TODO: mail
@@ -113,7 +113,7 @@ def print_status():
     print(STATUS.format(tries, datetime.timedelta(seconds=run_time)))
 
 if __name__ == '__main__':
-    backup()
+    backup_crash()
     init()
 
     while True:
