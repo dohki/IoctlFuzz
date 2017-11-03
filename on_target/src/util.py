@@ -98,10 +98,11 @@ def handle_err(callback_err):
     
     assert err_code != 0
 
-    util.print_err(err_code)
+    print_err(err_code)
 
     try:
-        callback_err(err_code)
+        if callback_err is not None:
+            callback_err(err_code)
         
     except NotImplementedError:
         # TODO: mail
