@@ -9,10 +9,16 @@ LAST_FUZZ_INFO_FILE_NAME = '../config/last_fuzz_info.txt'
 
 # TODO: Do not backup on target. Do backup on host with WinDbg. or pipe?
 # TODO: Store the recent 1000 requests in SQLite.
-def backup():
+def backup(dir_name):
     if os.path.exists(LAST_FUZZ_INFO_FILE_NAME):
-        num_crashes = len(glob.glob('../crashes/*'))
-        os.rename(LAST_FUZZ_INFO_FILE_NAME, '../crashes/{}.txt'.format(num_crashes))
+        num_crashes = len(glob.glob('../{}/*').format(dir_name))
+        os.rename(LAST_FUZZ_INFO_FILE_NAME, '../{}/{}.txt'.format(dir_name, num_crashes))
+
+def backup_error():
+    backup('errors')
+
+def backup_crash():
+    backup('crashes')
 
 def init():
     global tries, start_time, drv_handles
