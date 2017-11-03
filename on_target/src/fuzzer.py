@@ -1,4 +1,5 @@
 import os, glob, json
+import threading, signal
 import time, datetime
 import random, z3
 import ctypes, win32file
@@ -20,12 +21,27 @@ def backup_error():
 def backup_crash():
     backup('crashes')
 
+def monitor_dos(pid):
+    global drv_handles
+
+    while True:
+        dev_name    = random.choice(drv_handles.keys())
+        drv_handle  = util.create_drv_handle(dev_name)
+        if drv_handle == win32file.INVALID_HANDLE_VALUE:
+            util.notify('Got DoS')
+            os.kill(pid, signal.SIGTERM)
+        else:
+            ctypes.windll.kernel32.CloseHandle(drv_handle)
+
 def init():
     global tries, start_time, drv_handles
 
     tries       = 0
     start_time  = time.time()
     drv_handles	= {}
+
+    # TODO: thread-safe: print debug info
+    threading.Thread(target=monitor_dos, args=[os.getpid()]).start()
 
 def get_drv_handle(dev_name):
     global drv_handles
