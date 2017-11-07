@@ -40,7 +40,7 @@ def get_dev_name():
             None
             )
 
-        if drv_handle:
+        if drv_handle != -1:
             ctypes.windll.kernel32.CloseHandle(drv_handle)
             return True
         else:
