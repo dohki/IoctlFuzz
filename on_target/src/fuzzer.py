@@ -46,10 +46,14 @@ def init():
 def get_drv_handle(dev_name):
     global drv_handles
 
-    if dev_name not in drv_handles.keys():
-        drv_handles[dev_name] = util.create_drv_handle(dev_name)
-
-    return drv_handles[dev_name]
+    if dev_name in drv_handles.keys():
+        return drv_handles[dev_name]
+    else:
+        drv_handle = util.create_drv_handle(dev_name)
+        if drv_handle != -1:
+            drv_handles[dev_name] = drv_handle
+         
+        return drv_handle
 
 def get_rand_drv_dict():
     drv_dicts	= glob.glob('../dicts/*')
