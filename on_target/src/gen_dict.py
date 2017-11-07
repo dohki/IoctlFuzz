@@ -41,7 +41,11 @@ def get_dev_name():
 
     while True:
         dev_name = '\\\\.\\{}'.format(input('Device Name: '))
-        if is_valid(dev_name):
+        if dev_name == '\\\\.\\pass':
+            print('OK. You are responsible to fill on your own.')
+            return '???'
+        
+        elif is_valid(dev_name):
             print('OK')
             teardown()
 
