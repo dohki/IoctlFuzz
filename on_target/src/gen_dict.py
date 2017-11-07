@@ -2,6 +2,7 @@ import re
 import json
 import ctypes
 import win32file
+import util
 
 def teardown():
     for i in range(2):
@@ -28,17 +29,9 @@ def get_file_name():
 def get_dev_name():
     
     def is_valid(dev_name):
-        print('Validating device name...')
+        util.notify('Validating device name...')
 
-        drv_handle = ctypes.windll.kernel32.CreateFileW(
-            dev_name, 
-            win32file.GENERIC_READ | win32file.GENERIC_WRITE,
-            0, 
-            None, 
-            win32file.OPEN_EXISTING, 
-            0, 
-            None
-            )
+        drv_handle = util.create_drv_handle(dev_name)
 
         if drv_handle != -1:
             ctypes.windll.kernel32.CloseHandle(drv_handle)
