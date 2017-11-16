@@ -1,5 +1,6 @@
 import ctypes
 import json
+
 import util
 
 def load_crash_info(crash_name):

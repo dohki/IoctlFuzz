@@ -2,6 +2,7 @@ import re
 import json
 import ctypes
 import win32file
+
 import util
 
 def teardown():
