@@ -1,8 +1,11 @@
 import ctypes, ctypes.wintypes
 import win32file
 
-def notify(content):
-    print('[*] {}'.format(content))
+def make_line(data):
+    return '{}\n'.format(data)
+
+def notify(data):
+    print('[*] {}'.format(data))
 
 def print_err(err_code): 
 		

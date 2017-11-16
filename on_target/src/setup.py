@@ -1,15 +1,14 @@
 import os
 import winshell
 
-def make_line(string):
-    return '{}\n'.format(string)
+import util
 
 def add_script_to_startup_dir():
     script_path = os.path.join(winshell.startup(), 'on_target_boot.bat')
 
     with open(script_path, 'w') as f:
-        cmds  = make_line('pushd {}'.format(os.getcwd()))
-        cmds += make_line('start "" py -3 fuzzer.py')
+        cmds  = util.make_line('pushd {}'.format(os.getcwd()))
+        cmds += util.make_line('start "" py -3 fuzzer.py')
         f.write(cmds)
 
 def mkdirs():
