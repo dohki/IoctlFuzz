@@ -67,7 +67,7 @@ def get_ioctl_dict():
         elif ioctl_item == 'done':
             break
 
-        ioctl_item = list(map(lambda e: e.strip(), ioctl_item.split(',')))
+        ioctl_item = list(map(lambda e: e.strip(), ioctl_item.split(';')))
         if not is_valid(ioctl_item):
             print('Error: Format should be {ioctl code}, {in_buf_size_cond}, {out_buf_size_cond}.')
             continue
