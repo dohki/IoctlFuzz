@@ -7,20 +7,22 @@ import ctypes, win32file
 import util
 import reproducer
 
-LAST_FUZZ_INFO_FILE_NAME = '../config/last_fuzz_info.txt'
-
 # TODO: Do not backup on target. Do backup on host with WinDbg. or pipe?
 # TODO: Store the recent 1000 requests in SQLite.
-def backup(dir_name):
-    if os.path.exists(LAST_FUZZ_INFO_FILE_NAME):
-        new_file_name = '../{}/{}.txt'.format(dir_name, datetime.datetime.now())
-        os.rename(LAST_FUZZ_INFO_FILE_NAME, new_file_name)
 
-def backup_error():
-    backup('errors')
+def backup_corpus(fuzz_info):
+    corpus_dir = '../corpus/{}'.format(fuzz_info['dev_name'])
+    if not os.path.exists(corpus_dir):
+        os.mkdir(corpus_dir)
+
+    corpus_name = '{}/{}.txt'.format(corpus_dir, datetime.datetime.now())
+    with open(corpus_name, 'w') as f:
+        f.write(json.dumps(fuzz_info))
 
 def backup_crash():
-    backup('crashes')
+    num_crash = len(glob.glob('../crash/*'))
+    os.rename('../corpus', '../crash/{}'.format(num_crash))
+    os.mkdir('../corpus')
 
 def monitor_dos(pid):
     global drv_handles
@@ -114,8 +116,11 @@ def callback_err(err_code):
         time.sleep(3)
 
     elif err_code == 998:
+        pass
+        '''
         if reproducer.reproduce(LAST_FUZZ_INFO_FILE_NAME):
             backup_error()
+        '''
 
     else:
         raise NotImplementedError
@@ -138,8 +143,7 @@ if __name__ == '__main__':
         print_status()
 
         fuzz_info	= gen_rand_fuzz_info()
-        with open(LAST_FUZZ_INFO_FILE_NAME, 'w') as f:
-            f.write(json.dumps(fuzz_info))
+        backup_corpus(fuzz_info)
         
         drv_handle	= get_drv_handle(fuzz_info['dev_name'])
         ret_val		= util.do_fuzz(drv_handle, fuzz_info)
