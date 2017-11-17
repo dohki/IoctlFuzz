@@ -44,6 +44,8 @@ def print_err(err_code):
     notify('Error: {} ({})'.format(err_msg, err_code))
 
 def create_drv_handle(dev_name):
+    dev_name = '\\\\.\\' + dev_name
+
     notify('Creating Driver Handle for {}...'.format(dev_name))
     
     drv_handle = ctypes.windll.kernel32.CreateFileW(

@@ -41,9 +41,9 @@ def get_dev_name():
             return False
 
     while True:
-        dev_name = '\\\\.\\{}'.format(input('Device Name: '))
-        if dev_name == '\\\\.\\pass':
-            print('OK. You are responsible to fill on your own.')
+        dev_name = input('Device Name: ')
+        if dev_name == 'pass':
+            print('OK. You are responsible to fill it later on your own.')
             return '???'
         
         elif is_valid(dev_name):
