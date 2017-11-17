@@ -15,7 +15,12 @@ def backup_corpus(fuzz_info):
     if not os.path.exists(corpus_dir):
         os.mkdir(corpus_dir)
 
-    corpus_name = '{}/{}.txt'.format(corpus_dir, datetime.datetime.now())
+    cur_time    = str(datetime.datetime.now())
+    black_list  = [':', '.']
+    for token in black_list:
+        cur_time = cur_time.replace(token, '_')
+
+    corpus_name = '{}/{}.txt'.format(corpus_dir, cur_time)
     with open(corpus_name, 'w') as f:
         f.write(json.dumps(fuzz_info))
 
