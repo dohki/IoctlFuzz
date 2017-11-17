@@ -63,6 +63,8 @@ def get_ioctl_dict():
     while True:
         ioctl_item = input('IOCTL Item: ')
         if not ioctl_item:
+            continue
+        elif ioctl_item == 'done':
             break
 
         ioctl_item = list(map(lambda e: e.strip(), ioctl_item.split(',')))
