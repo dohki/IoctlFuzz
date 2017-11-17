@@ -12,7 +12,7 @@ def add_script_to_startup_dir():
         f.write(cmds)
 
 def mkdirs():
-    dir_names = ['config', 'dicts', 'errors', 'crashes']
+    dir_names = ['dict', 'corpus', 'crash']
     for dir_name in dir_names:
         try:
             os.mkdir(os.path.join('..', dir_name))
