@@ -59,7 +59,7 @@ def get_drv_handle(dev_name):
         return drv_handle
 
 def get_rand_drv_dict():
-    drv_dicts	= glob.glob('../dicts/*')
+    drv_dicts	= glob.glob('../dict/*')
     drv_dict	= random.choice(drv_dicts)
 
     with open(drv_dict) as f:
