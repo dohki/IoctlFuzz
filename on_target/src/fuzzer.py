@@ -110,7 +110,8 @@ def gen_rand_fuzz_info():
 
 def callback_err(err_code):
     if err_code == 6:
-        util.notify('Cannot get handle for driver...')
+        util.notify('Waiting for 3 secs due to invalid driver handle...')
+        time.sleep(3)
 
     elif err_code == 998:
         if reproducer.reproduce(LAST_FUZZ_INFO_FILE_NAME):
