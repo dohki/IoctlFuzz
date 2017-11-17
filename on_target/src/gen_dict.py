@@ -81,5 +81,5 @@ if __name__ == '__main__':
     file_name = get_file_name()
     info = dict(dev_name=get_dev_name(), ioctl_dict=get_ioctl_dict())
 
-    with open('../dicts/{}'.format(file_name), 'w') as f:
+    with open('../dict/{}'.format(file_name), 'w') as f:
         f.write(json.dumps(info))

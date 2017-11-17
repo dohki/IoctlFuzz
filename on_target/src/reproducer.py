@@ -25,6 +25,6 @@ def reproduce(crash_name):
 
 if __name__ == '__main__':
     crash_num   = input('Crash Number: ')
-    crash_name  = '../crashes/{}.txt'.format(crash_num)
+    crash_name  = '../crash/{}.txt'.format(crash_num)
     
     reproduce(crash_name)
