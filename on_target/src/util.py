@@ -105,11 +105,11 @@ def handle_err(callback_err):
 
     print_err(err_code)
 
-    try:
-        if callback_err is not None:
+    if callback_err is not None:
+        try:
             callback_err(err_code)
         
-    except NotImplementedError:
-        # TODO: mail
-        notify('New Error!')
-        input()
+        except NotImplementedError:
+            # TODO: mail
+            notify('New Error!')
+            input()
