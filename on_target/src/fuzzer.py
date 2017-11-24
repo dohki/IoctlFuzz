@@ -71,10 +71,7 @@ def get_rand_drv_dict():
         return json.load(f)
     
 def get_rand_buf_size(cond):
-    if cond is 'pass':
-        raise NotImplementedError
-
-    elif cond is None:
+    if cond is None:
         return random.randint(0, 2 ** 10 - 1)
 
     else:
@@ -102,16 +99,10 @@ def gen_rand_fuzz_info():
     dev_name	= drv_dict['dev_name']
     ioctl_dict  = drv_dict['ioctl_dict']
 
-    while True:
-        try:
-            ioctl_code	= random.choice(list(ioctl_dict.keys()))
+    ioctl_code	= random.choice(list(ioctl_dict.keys()))
 
-            buf_sizes		= list(map(get_rand_buf_size, ioctl_dict[ioctl_code]))
-            fake_buf_sizes	= list(map(get_fake_buf_size, buf_sizes))
-
-            break
-        except NotImplementedError:
-            pass
+    buf_sizes		= list(map(get_rand_buf_size, ioctl_dict[ioctl_code]))
+    fake_buf_sizes	= list(map(get_fake_buf_size, buf_sizes))
 
     if fake_buf_sizes[0] == -1:
         in_buf_raw 	= None
