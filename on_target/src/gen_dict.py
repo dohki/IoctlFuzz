@@ -21,7 +21,7 @@ def get_file_name():
         if is_valid(drv_name):
             break
         else:
-            print('Error: This extension is not for drivers.')
+            util.notify_err('Not a driver extension')
 
     teardown()
 
@@ -52,7 +52,7 @@ def get_dev_name():
 
             return dev_name
         else:
-            print('Error: Cannot get drvier handle with this device name.')
+            util.notify_err('Cannot get drvier handle for this device name')
 
 def get_ioctl_dict():
 
@@ -69,7 +69,7 @@ def get_ioctl_dict():
 
         ioctl_item = list(map(lambda e: e.strip(), ioctl_item.split(';')))
         if not is_valid(ioctl_item):
-            print('Error: Format should be {ioctl code}, {in_buf_size_cond}, {out_buf_size_cond}.')
+            util.notify_err('Format is {ioctl_code}; {in_buf_size_cond}; {out_buf_size_cond}')
             continue
 
         # TODO: Ensure z3 expression.

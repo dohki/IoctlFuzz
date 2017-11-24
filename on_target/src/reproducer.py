@@ -17,7 +17,7 @@ def reproduce(crash_name):
     if success:
         util.handle_err(None)
     else:
-        print('Error: Failed to reproduce crash.')
+        util.notify_err('Failed to reproduce crash')
 
     ctypes.windll.kernel32.CloseHandle(drv_handle)
 

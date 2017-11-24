@@ -7,6 +7,9 @@ def make_line(data):
 def notify(data):
     print('[*] {}'.format(data))
 
+def notify_err(err_msg):
+    notify('Error: {}'.format(err_msg))
+
 def print_err(err_code): 
 		
     def get_fmt_msg_flag():
