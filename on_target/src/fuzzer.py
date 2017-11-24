@@ -30,10 +30,10 @@ def backup_crash():
     os.mkdir('../corpus')
 
 def monitor_dos(pid):
-    global drv_handles
+    global drv_handle_cache
 
     while True:
-        dev_name    = random.choice(drv_handles.keys())
+        dev_name    = random.choice(drv_handle_cache.keys())
         drv_handle  = util.create_drv_handle(dev_name)
         if drv_handle == win32file.INVALID_HANDLE_VALUE:
             util.notify('Got DoS')
@@ -42,24 +42,24 @@ def monitor_dos(pid):
             ctypes.windll.kernel32.CloseHandle(drv_handle)
 
 def init():
-    global tries, start_time, drv_handles
+    global tries, start_time, drv_handle_cache
 
-    tries       = 0
-    start_time  = time.time()
-    drv_handles	= {}
+    tries               = 0
+    start_time          = time.time()
+    drv_handle_cache	= {}
 
     # TODO: thread-safe: print debug info
     threading.Thread(target=monitor_dos, args=[os.getpid()]).start()
 
 def get_drv_handle(dev_name):
-    global drv_handles
+    global drv_handle_cache
 
-    if dev_name in drv_handles.keys():
-        return drv_handles[dev_name]
+    if dev_name in drv_handle_cache.keys():
+        return drv_handle_cache[dev_name]
     else:
         drv_handle = util.create_drv_handle(dev_name)
         if drv_handle != -1:
-            drv_handles[dev_name] = drv_handle
+            drv_handle_cache[dev_name] = drv_handle
          
         return drv_handle
 
@@ -147,8 +147,9 @@ def print_status():
     STATUS      = 'tries: {:>10}, run time: {}'
     
     run_time	= time.time() - start_time
+    run_time    = datetime.timedelta(seconds=run_time)
     
-    print(STATUS.format(tries, datetime.timedelta(seconds=run_time)))
+    print(STATUS.format(tries, run_time))
 
 if __name__ == '__main__':
     backup_crash()
