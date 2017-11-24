@@ -149,7 +149,7 @@ def print_status():
     run_time	= time.time() - start_time
     run_time    = datetime.timedelta(seconds=run_time)
     
-    print(STATUS.format(tries, run_time))
+    util.notify(STATUS.format(tries, run_time))
 
 if __name__ == '__main__':
     backup_crash()
