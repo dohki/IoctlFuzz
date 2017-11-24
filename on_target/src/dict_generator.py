@@ -50,11 +50,13 @@ def get_ioctl_dict():
 
     ioctl_dict = {}
     while True:
-        ioctl_item = input('IOCTL Item: ')
+        ioctl_item = input('IOCTL Item: ').strip()
+        
         if not ioctl_item:
             continue
+
         elif ioctl_item == 'done':
-            break
+            return ioctl_dict
 
         ioctl_item = list(map(lambda e: e.strip(), ioctl_item.split(';')))
         if not is_valid(ioctl_item):
@@ -65,8 +67,6 @@ def get_ioctl_dict():
         ioctl_code		= ioctl_item[0]
         buf_size_conds	= ioctl_item[1:]
         ioctl_dict[ioctl_code] = list(map(lambda e: None if not e else e, buf_size_conds))
-
-    return ioctl_dict
 
 if __name__ == '__main__':
     dict_name   = get_dict_name()
