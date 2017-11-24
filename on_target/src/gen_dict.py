@@ -9,7 +9,7 @@ def teardown():
     for i in range(2):
         print('-' * 100)
 
-def get_drv_name():
+def get_dict_name():
     DRV_EXTS     = ['386', 'drv', 'dsk', 'lan', 'nlm', 'sys', 'vxd']
     DRV_EXT_PAT  = '\.({})$'.format('|'.join(DRV_EXTS))
     
@@ -80,8 +80,8 @@ def get_ioctl_dict():
     return ioctl_dict
 
 if __name__ == '__main__':
-    drv_name    = get_drv_name()
+    dict_name   = get_dict_name()
     info        = dict(dev_name=get_dev_name(), ioctl_dict=get_ioctl_dict())
 
-    with open('../dict/{}'.format(drv_name), 'w') as f:
+    with open('../dict/{}'.format(dict_name), 'w') as f:
         f.write(json.dumps(info))
