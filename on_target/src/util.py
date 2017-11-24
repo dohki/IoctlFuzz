@@ -4,6 +4,9 @@ import win32file
 def make_line(data):
     return '{}\n'.format(data)
 
+def hr():
+    print('-' * 50)
+
 def notify(data):
     print('[*] {}'.format(data))
 

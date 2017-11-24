@@ -5,10 +5,6 @@ import win32file
 
 import util
 
-def teardown():
-    for i in range(2):
-        print('-' * 100)
-
 def get_dict_name():
     DRV_EXTS     = ['386', 'drv', 'dsk', 'lan', 'nlm', 'sys', 'vxd']
     DRV_EXT_PAT  = '\.({})$'.format('|'.join(DRV_EXTS))
@@ -19,13 +15,11 @@ def get_dict_name():
     while True:
         drv_name = input('Driver Name: ')
         if is_valid(drv_name):
-            break
+            util.hr()
+
+            return re.sub(DRV_EXT_PAT, '.txt', drv_name)
         else:
             util.notify_err('Not a driver extension')
-
-    teardown()
-
-    return re.sub(DRV_EXT_PAT, '.txt', drv_name)
 
 def get_dev_name():
     
@@ -42,12 +36,9 @@ def get_dev_name():
 
     while True:
         dev_name = input('Device Name: ')
-        if dev_name == 'pass':
-            return '???'
-        
-        elif is_valid(dev_name):
-            teardown()
-
+        if dev_name == 'pass' or is_valid(dev_name):
+            util.hr()
+            
             return dev_name
         else:
             util.notify_err('Cannot get drvier handle for this device name')
