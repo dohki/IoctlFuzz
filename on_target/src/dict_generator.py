@@ -46,7 +46,7 @@ def get_dev_name():
 def get_ioctl_dict():
 
     def is_valid(ioctl_item):
-        return len(ioctl_item) == 3
+        return len(ioctl_item) == 4
 
     ioctl_dict = {}
     while True:
@@ -60,7 +60,7 @@ def get_ioctl_dict():
 
         ioctl_item = list(map(lambda e: e.strip(), ioctl_item.split(';')))
         if not is_valid(ioctl_item):
-            util.notify_err('Format is {ioctl_code}; {in_buf_size_cond}; {out_buf_size_cond}')
+            util.notify_err('Format is {ioctl_code}; {in_buf_size_cond}; {out_buf_size_cond}; {comment}')
             continue
 
         # TODO: Ensure z3 expression.

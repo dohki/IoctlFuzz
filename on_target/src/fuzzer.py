@@ -101,7 +101,7 @@ def gen_rand_fuzz_info():
 
     ioctl_code	= random.choice(list(ioctl_dict.keys()))
 
-    buf_sizes		= list(map(get_rand_buf_size, ioctl_dict[ioctl_code]))
+    buf_sizes		= list(map(get_rand_buf_size, ioctl_dict[ioctl_code][:2]))
     fake_buf_sizes	= list(map(get_fake_buf_size, buf_sizes))
 
     if fake_buf_sizes[0] == -1:
