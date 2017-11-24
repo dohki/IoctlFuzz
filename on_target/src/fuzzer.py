@@ -76,17 +76,21 @@ def get_rand_buf_size(cond):
     if cond is None:
         return random.randint(0, 2 ** BIT_NUM - 1)
 
-    z3.set_option('smt.phase_selection', 5)
-    z3.set_option('smt.random_seed', random.randint(0, ctypes.c_uint(-1).value // 2))
+    elif cond is 'pass':
+        raise NotImplementedError
 
-    x = z3.BitVec('x', BIT_NUM)
+    else:
+        z3.set_option('smt.phase_selection', 5)
+        z3.set_option('smt.random_seed', random.randint(0, ctypes.c_uint(-1).value // 2))
 
-    s = z3.Solver()
-    s.push()
-    s.add(eval(cond))
-    s.check()
+        x = z3.BitVec('x', BIT_NUM)
 
-    return s.model()[x].as_long()
+        s = z3.Solver()
+        s.push()
+        s.add(eval(cond))
+        s.check()
+
+        return s.model()[x].as_long()
 
 def get_fake_buf_size(buf_size):
     return random.randint(-1, 2 * buf_size)
@@ -97,10 +101,16 @@ def gen_rand_fuzz_info():
     dev_name	= drv_dict['dev_name']
     ioctl_dict  = drv_dict['ioctl_dict']
 
-    ioctl_code	= random.choice(list(ioctl_dict.keys()))
+    while True:
+        try:
+            ioctl_code	= random.choice(list(ioctl_dict.keys()))
 
-    buf_sizes		= list(map(get_rand_buf_size, ioctl_dict[ioctl_code]))
-    fake_buf_sizes	= list(map(get_fake_buf_size, buf_sizes))
+            buf_sizes		= list(map(get_rand_buf_size, ioctl_dict[ioctl_code]))
+            fake_buf_sizes	= list(map(get_fake_buf_size, buf_sizes))
+
+            break
+        except NotImplementedError:
+            pass
 
     if fake_buf_sizes[0] == -1:
         in_buf_raw 	= None
