@@ -71,23 +71,24 @@ def get_rand_drv_dict():
         return json.load(f)
     
 def get_rand_buf_size(cond):
-    BIT_NUM = 12
-
-    if cond is None:
-        return random.randint(0, 2 ** BIT_NUM - 1)
-
-    elif cond is 'pass':
+    if cond is 'pass':
         raise NotImplementedError
 
-    else:
-        z3.set_option('smt.phase_selection', 5)
-        z3.set_option('smt.random_seed', random.randint(0, ctypes.c_uint(-1).value // 2))
+    elif cond is None:
+        return random.randint(0, 2 ** 10 - 1)
 
-        x = z3.BitVec('x', BIT_NUM)
+    else:
+        rand_seed = random.randint(0, ctypes.c_uint(-1).value // 2)
+
+        z3.set_option('smt.phase_selection', 5)
+        z3.set_option('smt.random_seed', rand_seed)
+
+        x = z3.BitVec('x', 32)
 
         s = z3.Solver()
         s.push()
         s.add(eval(cond))
+        s.add(x < 2 ** 16)
         s.check()
 
         return s.model()[x].as_long()
