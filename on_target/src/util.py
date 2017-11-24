@@ -8,7 +8,7 @@ def notify(data):
     print('[*] {}'.format(data))
 
 def notify_err(err_msg):
-    notify('Error: {}'.format(err_msg))
+    notify('[ERROR] {}'.format(err_msg))
 
 def print_err(err_code): 
 		
@@ -44,7 +44,7 @@ def print_err(err_code):
 
     err_msg = buf.value.decode('utf-8').strip()
 
-    notify('Error: {} ({})'.format(err_msg, err_code))
+    notify_err('{} ({})'.format(err_msg, err_code))
 
 def create_drv_handle(dev_name):
     dev_name = '\\\\.\\' + dev_name
